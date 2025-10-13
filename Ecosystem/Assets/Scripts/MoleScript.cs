@@ -11,16 +11,20 @@ public class MoleScript : MonoBehaviour
     public float energy = 100;
     public float health = 100;
     public float age = 0;
+    public float death_age = 100;
     public float speed = 2f;
-    MoleStates state = MoleStates.exploring;
+    public MoleStates state = MoleStates.exploring;
 
     //stat_update variables ----------------------------------------------------------
-    float hungerStep = 5;
+    float hungerStep = 2;
     public float hungerTimer;
-    public float hungerLoss = 2f;
+    public float hungerLoss = 5f;
+
+    float energyGain = 5;
+    float energyLoss = 4;
 
     //states --------------------------------------------------------------------------
-    enum MoleStates
+    public enum MoleStates
     {
         sleeping,
         eating,
@@ -33,7 +37,7 @@ public class MoleScript : MonoBehaviour
     //other vars -----------------------------------------------------------------------
     public GameObject home;
     public Vector2 target;
-    Queue<GameObject> food_seen = new Queue<GameObject>();
+    List<GameObject> food_seen = new List<GameObject>();
     List<GameObject> enemies_sensed = new List<GameObject>();
     public SpriteRenderer spriteRenderer;
     public Collider2D circleCollider;
@@ -46,14 +50,14 @@ public class MoleScript : MonoBehaviour
 
         age += Time.deltaTime;
 
-        if (hunger <= 50 || state == MoleStates.sleeping)
+        if (hunger <= 50 && state == MoleStates.sleeping)
         {
             state = MoleStates.exploring;
         }
 
-        if (energy <= 20)
+        if ((energy <= 20) && (state != MoleStates.sleeping))
         {
-            state = MoleStates.sleeping;
+            state = MoleStates.escaping;
         }
     }
 
@@ -70,7 +74,23 @@ public class MoleScript : MonoBehaviour
     public void add_food(GameObject food)
     {
         Debug.Log("added");
-        food_seen.Enqueue(food);
+        food_seen.Add(food);
+    }
+
+    public GameObject find_closest_tunnel()
+    {
+        GameObject closest = null;
+
+        GameObject[] tunnels = GameObject.FindGameObjectsWithTag("tunnel");
+        foreach (GameObject tunnel in tunnels)
+        {
+            if (closest == null || Vector2.Distance(gameObject.transform.position, tunnel.transform.position) < Vector2.Distance(gameObject.transform.position, closest.transform.position))
+            {
+                closest = tunnel;
+            }
+        }
+
+        return closest;
     }
 
     public void hide()
@@ -83,6 +103,15 @@ public class MoleScript : MonoBehaviour
     {
         spriteRenderer.enabled = true;
         circleCollider.enabled = true;
+    }
+
+    public void remove_health(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            state = MoleStates.dying;
+        }
     }
 
     //state functions -------------------------------------------------------------------
@@ -102,11 +131,12 @@ public class MoleScript : MonoBehaviour
             else if ((food_seen.Count == 0) && (enemies_sensed.Count == 0))
             {
                 transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                energy -= energyLoss * Time.deltaTime;
             }
 
             if (food_seen.Count != 0)
             {
-                target = food_seen.Dequeue().transform.position;
+                target = food_seen[0].transform.position;
                 state = MoleStates.eating;
             }
 
@@ -123,28 +153,34 @@ public class MoleScript : MonoBehaviour
         {
             state = MoleStates.escaping;
         }
-        else
+        else if (food_seen.Count != 0)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
-        }
-    }
-
-    public void escape()
-    {
-        if (enemies_sensed.Count != 0)
-        {
-            Debug.Log("heading home");
-            target = home.transform.position;
+            if (food_seen[0])
+            {
+                target = food_seen[0].transform.position;
+                transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                energy -= energyLoss * Time.deltaTime;
+            }
+            else
+            {
+                food_seen.Remove(food_seen[0]);
+            }
         }
         else
         {
             state = MoleStates.exploring;
         }
-        transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
     }
 
-    public void sleep()
+    public void escape()
     {
+        home = find_closest_tunnel();
+
+        if (enemies_sensed.Count == 0)
+        {
+            state = MoleStates.exploring;
+        }
+
         if (target != (Vector2)home.transform.position)
         {
             target = home.transform.position;
@@ -152,10 +188,37 @@ public class MoleScript : MonoBehaviour
         else
         {
             transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            energy -= energyLoss * Time.deltaTime;
         }
     }
 
-    //game functions
+    public void sleep()
+    {
+        if (energy >= 100 && enemies_sensed.Count == 0)
+        {
+            appear();
+            state = MoleStates.exploring;
+        }
+        else
+        {
+            energy += energyGain * Time.deltaTime;
+        }
+    }
+
+    public void birthing()
+    {
+        if (state == MoleStates.sleeping)
+        {
+            
+        }
+    }
+
+    public void dying()
+    {
+        Destroy(gameObject);
+    }
+
+    //game functions ------------------------------------------------------------------------
     void Start()
     {
         hungerTimer = hungerStep;
@@ -183,8 +246,26 @@ public class MoleScript : MonoBehaviour
                 escape();
                 break;
 
+            case MoleStates.sleeping:
+                Debug.Log("sleeping");
+                sleep();
+                break;
+
+            case MoleStates.birthing:
+                Debug.Log("Birthing");
+                break;
+
+            case MoleStates.dying:
+                Debug.Log("dying");
+                break;
+
             default:
                 break;
+        }
+        
+        if (age >= death_age)
+        {
+            state = MoleStates.dying;
         }
 
         stat_update();
@@ -208,12 +289,11 @@ public class MoleScript : MonoBehaviour
 
         if (collision.collider.CompareTag("tunnel"))
         {
-            if (state == MoleStates.sleeping || state == MoleStates.escaping)
+            if (state == MoleStates.escaping)
             {
                 home = collision.collider.gameObject;
                 hide();
                 state = MoleStates.sleeping;
-                energy += 10 * Time.deltaTime;
             }
         }
     }

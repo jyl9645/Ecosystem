@@ -6,15 +6,27 @@ public class RaptorDetectScript : MonoBehaviour
     [SerializeField]
     GameObject raptor;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    GameObject prey;
+
     void Start()
     {
-        
+        prey = raptor.GetComponent<RaptorScript>().prey;
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("mole"))
+        {
+            raptor.GetComponent<RaptorScript>().change_target(collision.gameObject);
+        }
     }
+
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision == prey)
+        {
+            raptor.GetComponent<RaptorScript>().change_target(null);
+        }
+    }
+
 }

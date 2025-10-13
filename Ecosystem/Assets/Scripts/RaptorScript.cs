@@ -11,13 +11,17 @@ public class RaptorScript : MonoBehaviour
     public float energy = 100;
     public float health = 100;
     public float age = 0;
-    public float speed = 2f;
+    public float speed = 5f;
+    public float attack = 10f;
     RaptorStates state = RaptorStates.exploring;
 
     //stat_update variables ----------------------------------------------------------
     float hungerStep = 5;
     public float hungerTimer;
     public float hungerLoss = 2f;
+
+    public float smooth = 0.9f;
+    private Vector2 velocity = Vector2.zero;
 
     //states --------------------------------------------------------------------------
     enum RaptorStates
@@ -31,7 +35,7 @@ public class RaptorScript : MonoBehaviour
 
     //other vars -------------------------------------------------------------------
     public Vector2 target;
-    Queue<GameObject> prey_found = new Queue<GameObject>();
+    public GameObject prey;
 
     //helper functions ------------------------------------------------------
     public void stat_update()
@@ -52,9 +56,9 @@ public class RaptorScript : MonoBehaviour
         }
     }
 
-    public void add_food(GameObject food)
+    public void change_target(GameObject food)
     {
-        prey_found.Enqueue(food);
+        prey = food;
     }
 
     //state functions
@@ -64,13 +68,12 @@ public class RaptorScript : MonoBehaviour
         {
             target = new Vector2(UnityEngine.Random.Range(-8, 8), UnityEngine.Random.Range(-4, 4));
         }
-        else if (prey_found.Count == 0)
+        else if (prey == null)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector2.SmoothDamp(transform.position, target, ref velocity, smooth);
         }
-        if (prey_found.Count != 0)
+        if (prey != null)
         {
-            target = prey_found.Dequeue().transform.position;
             state = RaptorStates.eating;
         }
     }
@@ -79,13 +82,36 @@ public class RaptorScript : MonoBehaviour
     {
         if (energy > 20)
         {
-            transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+            transform.position = Vector2.SmoothDamp(transform.position, prey.transform.position, ref velocity, smooth);
+            if (prey.GetComponent<MoleScript>().state == MoleScript.MoleStates.sleeping)
+            {
+                prey = null;
+            }
+        }
+        
+        if (prey == null)
+        {
+            if (energy < 20)
+            {
+                state = RaptorStates.sleeping;
+            }
+            else
+            {
+                state = RaptorStates.exploring;
+            }
         }
     }
 
     public void sleep()
     {
-        energy += 10 * Time.deltaTime;
+        if (energy >= 100)
+        {
+            state = RaptorStates.exploring;
+        }
+        else
+        {
+            energy += 10 * Time.deltaTime;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -100,13 +126,18 @@ public class RaptorScript : MonoBehaviour
         switch (state)
         {
             case RaptorStates.exploring:
-                Debug.Log("exploring");
+                Debug.Log("Raptor exploring");
                 explore();
                 break;
 
             case RaptorStates.eating:
-                Debug.Log("eating");
+                Debug.Log("Raptor eating");
                 eat();
+                break;
+
+            case RaptorStates.sleeping:
+                Debug.Log("Raptor sleeping");
+                sleep();
                 break;
 
             default:
@@ -114,5 +145,13 @@ public class RaptorScript : MonoBehaviour
         }
 
         stat_update();
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("mole") && state == RaptorStates.eating)
+        {
+            collision.gameObject.GetComponent<MoleScript>().remove_health(attack * Time.deltaTime);
+        }
     }
 }
