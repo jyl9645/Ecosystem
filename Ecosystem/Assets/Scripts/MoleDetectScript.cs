@@ -12,9 +12,8 @@ public class DetectScript : MonoBehaviour
         {
             mole.GetComponent<MoleScript>().add_enemy(collision.gameObject);
         }
-        else if (collision.CompareTag("berry"))
+        else if (collision.CompareTag("berry") || collision.CompareTag("bug"))
         {
-            Debug.Log("catch berry");
             mole.GetComponent<MoleScript>().add_food(collision.gameObject);
         }
     }
@@ -24,6 +23,10 @@ public class DetectScript : MonoBehaviour
         if (collision.CompareTag("raptor"))
         {
             mole.GetComponent<MoleScript>().remove_enemy(collision.gameObject);
+        }
+        else if (collision.CompareTag("berry") || collision.CompareTag("bug"))
+        {
+            mole.GetComponent<MoleScript>().remove_food(collision.gameObject);
         }
     }
 }

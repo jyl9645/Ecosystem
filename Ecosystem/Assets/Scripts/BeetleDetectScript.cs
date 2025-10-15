@@ -2,15 +2,26 @@ using UnityEngine;
 
 public class BeetleDetectScript : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField]
+    GameObject beetle;
+
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("mole"))
+        {
+            beetle.GetComponent<BeetleScript>().add_enemy(collision.gameObject);
+        }
+        else if (collision.CompareTag("berry") || collision.CompareTag("tunnel"))
+        {
+            beetle.GetComponent<BeetleScript>().add_food(collision.gameObject);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerExit2D(Collider2D collision)
     {
-        
+        if (collision.CompareTag("raptor"))
+        {
+            beetle.GetComponent<BeetleScript>().remove_enemy(collision.gameObject);
+        }
     }
 }

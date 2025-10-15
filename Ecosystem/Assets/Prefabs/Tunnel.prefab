@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1735230296686167038
+--- !u!1 &2667361557529878872
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8195576598946349011}
-  - component: {fileID: 1994988469957990793}
-  - component: {fileID: 2286147273308614422}
-  - component: {fileID: 5078626932327724510}
-  - component: {fileID: 5143962488680652868}
-  - component: {fileID: 4221911185207882131}
+  - component: {fileID: 3661843537179547745}
+  - component: {fileID: 4566524395380516908}
+  - component: {fileID: 395621725830603139}
+  - component: {fileID: 5980266219359527114}
+  - component: {fileID: 3087910835387427151}
   m_Layer: 0
-  m_Name: Berry
-  m_TagString: berry
+  m_Name: Tunnel
+  m_TagString: tunnel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8195576598946349011
+--- !u!4 &3661843537179547745
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
+  m_GameObject: {fileID: 2667361557529878872}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.57, y: 1.83, z: 0}
-  m_LocalScale: {x: 0.32, y: 0.272, z: 0.32}
+  m_LocalPosition: {x: -0.68, y: 3.08, z: 0}
+  m_LocalScale: {x: 0.19999999, y: 0.24096386, z: 0.24096386}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1994988469957990793
+--- !u!212 &4566524395380516908
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
+  m_GameObject: {fileID: 2667361557529878872}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,24 +79,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3848049683900379228, guid: ca39f85c77ae1974fa15fdae93c54ee6, type: 3}
-  m_Color: {r: 0.89824903, g: 0.79811317, b: 1, a: 1}
+  m_Sprite: {fileID: -8739697782623032383, guid: 8ab61d2006124be4e84e2872f9a54150, type: 3}
+  m_Color: {r: 0.86415094, g: 0.70326793, b: 0.50055534, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &2286147273308614422
-CapsuleCollider2D:
+--- !u!60 &395621725830603139
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
+  m_GameObject: {fileID: 2667361557529878872}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -125,17 +124,30 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.032562576, y: -0.24900791}
-  m_Size: {x: 2.1722534, y: 3.5706682}
-  m_Direction: 0
---- !u!50 &5078626932327724510
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.85, y: 5.2900004}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.64639574, y: 2.565591}
+      - {x: -2.7433693, y: -2.3400173}
+      - {x: 2.8954613, y: -2.5293746}
+  m_UseDelaunayMesh: 0
+--- !u!50 &5980266219359527114
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
+  m_GameObject: {fileID: 2667361557529878872}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -155,39 +167,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &5143962488680652868
+--- !u!114 &3087910835387427151
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
+  m_GameObject: {fileID: 2667361557529878872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab984683624005343aab48e68093c02f, type: 3}
+  m_Script: {fileID: 11500000, guid: 58a9e1d7b375c244db974c678a1f75a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  animator: {fileID: 4221911185207882131}
---- !u!95 &4221911185207882131
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1735230296686167038}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5b4f154d06f1a3c4c963bc82206e7580, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  breed_timer: 80
+  inhabitants: []
+  baby: {fileID: 3094281976773900484, guid: fffc2a783d599d84ebeb815e1a782891, type: 3}
+  collider: {fileID: 395621725830603139}
