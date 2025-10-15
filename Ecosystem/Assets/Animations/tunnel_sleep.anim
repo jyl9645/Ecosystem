@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: hyena_walk
+  m_Name: tunnel_sleep
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,9 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -3181438773050836323, guid: 41889199c64c9484bb5cd23a25ab4d8b, type: 3}
-    - time: 0.05
-      value: {fileID: 694036048686144334, guid: 825425796af7a16438417d5a66f206b6, type: 3}
-    - time: 0.1
-      value: {fileID: 1979239529630283305, guid: 5c6c6294d97aca947955c27ff5fc6af4, type: 3}
-    - time: 0.15
-      value: {fileID: 694036048686144334, guid: 825425796af7a16438417d5a66f206b6, type: 3}
+      value: {fileID: 21300000, guid: 25bbb5e53d2c2d24990da4ab14855f77, type: 3}
+    - time: 0.16666667
+      value: {fileID: 21300000, guid: 25bbb5e53d2c2d24990da4ab14855f77, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,16 +46,14 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -3181438773050836323, guid: 41889199c64c9484bb5cd23a25ab4d8b, type: 3}
-    - {fileID: 694036048686144334, guid: 825425796af7a16438417d5a66f206b6, type: 3}
-    - {fileID: 1979239529630283305, guid: 5c6c6294d97aca947955c27ff5fc6af4, type: 3}
-    - {fileID: 694036048686144334, guid: 825425796af7a16438417d5a66f206b6, type: 3}
+    - {fileID: 21300000, guid: 25bbb5e53d2c2d24990da4ab14855f77, type: 3}
+    - {fileID: 21300000, guid: 25bbb5e53d2c2d24990da4ab14855f77, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.16666667
+    m_StopTime: 0.18333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

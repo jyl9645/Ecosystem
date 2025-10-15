@@ -20,6 +20,9 @@ public class MoleScript : MonoBehaviour
     public float hungerTimer;
     public float hungerLoss = 10f;
 
+    public float exploreTimer = 3;
+    public float exploreInterval = 3;
+
     float energyGain = 5;
     float energyLoss = 4;
 
@@ -64,6 +67,15 @@ public class MoleScript : MonoBehaviour
         if (hunger < 1 || age >= death_age)
         {
             state = MoleStates.dying;
+        }
+
+        if (exploreTimer < 0)
+        {
+            exploreTimer = exploreInterval;
+        }
+        else
+        {
+            exploreTimer -= Time.deltaTime;
         }
     }
 
@@ -124,6 +136,7 @@ public class MoleScript : MonoBehaviour
     public void remove_health(float damage)
     {
         health -= damage;
+        anim.SetTrigger("Hurt");
         if (health <= 0)
         {
             state = MoleStates.dying;
@@ -140,7 +153,7 @@ public class MoleScript : MonoBehaviour
 
         else
         {
-            if (target == Vector2.zero || (Vector2)transform.position == target || target == (Vector2)home.transform.position)
+            if (target == Vector2.zero || (Vector2)transform.position == target || target == (Vector2)home.transform.position || exploreTimer <= 0)
             {
                 target = new Vector2(UnityEngine.Random.Range(-8, 8), UnityEngine.Random.Range(-4, 4));
             }
@@ -198,7 +211,7 @@ public class MoleScript : MonoBehaviour
             return;
         }
 
-        if (target != (Vector2)home.transform.position && home != null)
+        if (home != null && target != (Vector2)home.transform.position)
         {
             target = home.transform.position;
         }
@@ -223,10 +236,12 @@ public class MoleScript : MonoBehaviour
         if (energy >= 100 && enemies_sensed.Count == 0)
         {
             appear();
+            home.GetComponent<TunnelScript>().remove_inhabit(gameObject);
             state = MoleStates.exploring;
         }
         else
         {
+            home.GetComponent<TunnelScript>().tunnel_sleep();
             energy += energyGain * Time.deltaTime;
         }
     }
@@ -328,6 +343,7 @@ public class MoleScript : MonoBehaviour
             if (state == MoleStates.escaping)
             {
                 home = collision.collider.gameObject;
+                home.GetComponent<TunnelScript>().add_inhabit(gameObject);
                 hide();
                 state = MoleStates.sleeping;
             }

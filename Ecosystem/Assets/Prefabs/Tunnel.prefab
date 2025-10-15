@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 395621725830603139}
   - component: {fileID: 5980266219359527114}
   - component: {fileID: 3087910835387427151}
+  - component: {fileID: 4438046519695585890}
   m_Layer: 0
   m_Name: Tunnel
   m_TagString: tunnel
@@ -184,3 +185,25 @@ MonoBehaviour:
   inhabitants: []
   baby: {fileID: 3094281976773900484, guid: fffc2a783d599d84ebeb815e1a782891, type: 3}
   collider: {fileID: 395621725830603139}
+--- !u!95 &4438046519695585890
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2667361557529878872}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: af7f52a0710f0844d96b90cbc6fdccc0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

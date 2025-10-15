@@ -22,6 +22,9 @@ public class BeetleScript : MonoBehaviour
     float energyGain = 5;
     float energyLoss = 4;
 
+    public float exploreTimer = 3;
+    public float exploreInterval = 3;
+
     float birthTimer = 30;
     float birthInterval = 30;
 
@@ -39,7 +42,7 @@ public class BeetleScript : MonoBehaviour
 
     //other stats
     public Vector2 target;
-    public List<GameObject> enemies;
+    public List<GameObject> enemies = new List<GameObject>();
     public List<GameObject> food;
     public GameObject tunnelPrefab;
     public GameObject eggs;
@@ -82,6 +85,15 @@ public class BeetleScript : MonoBehaviour
             state = BeetleStates.building;
             dirt = 0;
         }
+
+        if (exploreTimer < 0)
+        {
+            exploreTimer = exploreInterval;
+        }
+        else
+        {
+            exploreTimer -= Time.deltaTime;
+        }
     }
 
     public void add_enemy(GameObject enemy)
@@ -103,6 +115,7 @@ public class BeetleScript : MonoBehaviour
     public void remove_health(float damage)
     {
         health -= damage;
+        anim.SetTrigger("Hurt");
         if (health <= 0)
         {
             state = BeetleStates.dying;
@@ -119,7 +132,7 @@ public class BeetleScript : MonoBehaviour
 
         else
         {
-            if (target == Vector2.zero || (Vector2)transform.position == target)
+            if (target == Vector2.zero || (Vector2)transform.position == target || exploreTimer <= 0)
             {
                 target = new Vector2(UnityEngine.Random.Range(-8, 8), UnityEngine.Random.Range(-4, 4));
             }
@@ -179,10 +192,13 @@ public class BeetleScript : MonoBehaviour
         }
         else
         {
-            target = new Vector2(-enemies[0].transform.position.x, -enemies[0].transform.position.y);
-            transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
-            energy -= energyLoss * Time.deltaTime;
-            return;
+            if (enemies[0])
+            {
+                target = new Vector2(-enemies[0].transform.position.x, -enemies[0].transform.position.y);
+                transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
+                energy -= energyLoss * Time.deltaTime;
+                return;
+            }
         }
     }
 
@@ -292,7 +308,7 @@ public class BeetleScript : MonoBehaviour
 
         if (collision.collider.CompareTag("tunnel"))
         {
-            collision.gameObject.GetComponent<TunnelScript>().lose_health(10 * Time.deltaTime);
+            collision.gameObject.GetComponent<TunnelScript>().lose_health(20 * Time.deltaTime);
             dirt += 8 * Time.deltaTime;
             if (hunger < 100)
             {

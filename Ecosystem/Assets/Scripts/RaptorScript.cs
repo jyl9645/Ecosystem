@@ -21,6 +21,9 @@ public class RaptorScript : MonoBehaviour
     public float hungerTimer;
     public float hungerLoss = 2f;
 
+    public float exploreTimer = 3;
+    public float exploreInterval = 3;
+
     public float energyLoss = 4;
 
     public float breedTimer = 50;
@@ -77,6 +80,15 @@ public class RaptorScript : MonoBehaviour
             breedTimer -= Time.deltaTime;
         }
 
+        if (exploreTimer < 0)
+        {
+            exploreTimer = exploreInterval;
+        }
+        else
+        {
+            exploreTimer -= Time.deltaTime;
+        }
+
     }
 
     public void change_target(GameObject food)
@@ -114,7 +126,7 @@ public class RaptorScript : MonoBehaviour
     //state functions
     public void explore()
     {
-        if (target == Vector2.zero || (Vector2)transform.position == target)
+        if (target == Vector2.zero || (Vector2)transform.position == target || exploreTimer <= 0)
         {
             target = new Vector2(UnityEngine.Random.Range(-8, 8), UnityEngine.Random.Range(-4, 4));
         }
@@ -224,8 +236,11 @@ public class RaptorScript : MonoBehaviour
     {
         if (collision.collider.CompareTag("mole") && state == RaptorStates.eating)
         {
-            collision.gameObject.GetComponent<MoleScript>().remove_health(attack * Time.deltaTime);
-            hunger = Math.Clamp(hunger + 10, 0, 100);
+            if (collision.collider.GetComponent<MoleScript>().state != MoleScript.MoleStates.sleeping)
+            {
+                collision.gameObject.GetComponent<MoleScript>().remove_health(attack * Time.deltaTime);
+                hunger = Math.Clamp(hunger + 10, 0, 100);
+            }
         }
 
     }
